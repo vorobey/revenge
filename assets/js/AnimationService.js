@@ -55,7 +55,12 @@ basicProtos.AnimationService =  (function() {
 			}
 			_.each(self.enemies, function(enemyCol) {
 				_.each(enemyCol, function(enemy) {
-					enemy.move(null, enemy.options.y + self.options.enemyMovementStep);
+					var newY = enemy.options.y + self.options.enemyMovementStep;
+					if (newY >= app.hero.options.y) {
+						self.stopAnimation(true);
+						return false;
+					}
+					enemy.move(null, newY);
 				})
 			})		
 		}, self.options.enemyMovementSpeed);
@@ -82,6 +87,9 @@ basicProtos.AnimationService =  (function() {
 			return !!item.length;
 		});
 		var col = notEmpty[getRandomInt(0, notEmpty.length-1)];
+		if (!col) {
+			return false;
+		}
 		return col[col.length-1];
 	}
 
@@ -95,6 +103,9 @@ basicProtos.AnimationService =  (function() {
         _.each(self.animationObjects, function(item, index){
             self.canvasService.draw(item, {x:item.options.x, y: item.options.y});
         });
+        var enemy = getRandomEnemyForShoot(self.enemies, self.enemies.length);
+        enemy.changeState();
+        app.hero.changeState();
         checkCollision.apply(self);
     };
 
@@ -105,16 +116,15 @@ basicProtos.AnimationService =  (function() {
         var self = this;
         self.animId = window.requestAnimationFrame(self.doAnimationLoop.bind(self));
         self.render();
+        //update fps counter
         if (!lastCalledTime) {
         	lastCalledTime = Date.now();
         	fps = 0;
         	return;
         }
-
         delta = (new Date().getTime()-lastCalledTime)/1000;
         lastCalledTime = Date.now();
         fps = Math.round(1/delta);
-
     	var fpsEvent = document.createEvent("CustomEvent");
     	fpsEvent.initCustomEvent("updateFPS", true, true, {'value': fps});
         document.dispatchEvent(fpsEvent)
@@ -155,7 +165,11 @@ basicProtos.AnimationService =  (function() {
 			    var enemy =  new app.basicProtos.CanvasObject({
 			        imageSrc: app.config.enemy.imageSrc,
 			        animationService: self,
-			        area: [cellWidth*i, j*cellHeight, cellWidth*(i+1), j*cellHeight+cellHeight]
+			        area: [cellWidth*i, j*cellHeight, cellWidth*(i+1), j*cellHeight+cellHeight],
+			        states: {
+						default: [[0,0], [1,0]],
+						angry: [[0,1]]
+					}
 			    });
 		    	enemyCol.push(enemy);
 			}
@@ -169,7 +183,7 @@ basicProtos.AnimationService =  (function() {
 		return new app.basicProtos.CanvasObject({
             imageSrc: src,
             animationService: this,
-            heroWeapon: isHero
+            heroWeapon: isHero,
         });
 	}
 
@@ -179,7 +193,13 @@ basicProtos.AnimationService =  (function() {
 	        imageSrc: app.config.hero.imageSrc,
 	        animationService: this,
 	        isHero: true,
-	        area: [0, field.height-80, field.width, field.height]
+	        area: [0, field.height-80, field.width, field.height],
+	        statesCols: 1,
+			statesRows: 1,
+			states: {
+				default: [[0,0], [1,0]],
+				angry: [[0,1]]
+			}
 	    });
 	}
 
@@ -206,7 +226,9 @@ basicProtos.AnimationService =  (function() {
 			if (newY+weapon.options.height <= self.options.weaponStep) {
 				destroyWeapon.apply(self, [weapon])
 			}
-		}, self.options.weaponSpeed)
+		}, self.options.weaponSpeed);
+
+		object.changeState('angry', true);
 
 		self.weaponTmt = setTimeout(function() {
 			clearTimeout(self.weaponTmt);

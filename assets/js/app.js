@@ -6,7 +6,7 @@ $(function() {
 
     //get config and then init all
     $.ajax({
-        url: '../assets/files/data.json',
+        url: 'assets/files/data.json',
         isLocal: true,
         method: 'GET',
         dataType: 'json',

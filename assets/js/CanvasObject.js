@@ -18,6 +18,9 @@ basicProtos.CanvasObject =  (function() {
     CanvasObject.prototype.init = function(options) {
         this.options = options;
         this.id = generateId();
+        this.stateIndex = 1;
+        this.stateKey = "default";
+
         this.animationService = this.options.animationService;
     };
 
@@ -41,16 +44,41 @@ basicProtos.CanvasObject =  (function() {
         if (y) self.options.y = y;
 
         var callback = function() {
-            self.options.width = self.image.width;
-            self.options.height = self.image.height;
+            self.options.width = self.image.width/self.options.states.default.length;
+            self.options.height = self.options.states.angry && self.options.states.angry.length ? self.image.height/2 : self.image.height;
             if (self.options.area.length) {
-                self.options.x = self.options.area[0] + ((self.options.area[2]-self.options.area[0]-self.options.width)/2);
-                self.options.y = self.options.area[1] + ((self.options.area[3]-self.options.area[1]-self.options.height)/2);
-                console.log(self.options.x, self.options.y, self.options.area, self)
+                calculatePos.apply(self);
             }
             self.animationService.pushToLoop(self);
         };
         self.setImage(callback);
+    };
+
+    CanvasObject.prototype.changeState = function(state, immediate) {
+        if (this.stateTimeout && !immediate) {
+            return false;
+        }
+
+        if (immediate) {
+            clearTimeout(this.stateTimeout);
+            this.stateTimeout = null;
+        }
+        var self = this;
+
+        if (!state) state = 'default';
+
+        var newState = this.stateIndex + 1;
+        if (newState > this.options.states[state].length) {
+            newState = 1;
+        }
+        this.stateIndex = newState;
+        this.stateKey = state;
+
+        this.stateTimeout = setTimeout(function() {
+            clearTimeout(this.stateTimeout);
+            self.stateTimeout = null;
+        }, 1000);
+
     };
 
     CanvasObject.prototype.move = function(newX, newY) {
@@ -65,6 +93,11 @@ basicProtos.CanvasObject =  (function() {
     function generateId() {
         //moron function for generate ID of object, must include more code
         return 'id' + (Math.floor(Math.random() * (10000 - 1 + 1)) + 1) + '' + Date.now();
+    }
+
+    function calculatePos() {
+        this.options.x = this.options.area[0] + ((this.options.area[2]-this.options.area[0]-this.options.width)/2);
+        this.options.y = this.options.area[1] + ((this.options.area[3]-this.options.area[1]-this.options.height)/2);
     }
 
 

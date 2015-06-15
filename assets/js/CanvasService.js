@@ -30,7 +30,18 @@ basicProtos.CanvasOperations = (function() {
             (position.y+object.options.height < 0 || position.y-object.options.height > this.options.height )) {
             return false;
         }
-        opts.ctx.drawImage(object.image, position.x, position.y);
+        var states = object.options.states;
+        opts.ctx.drawImage(
+            object.image, 
+            object.options.width * states[object.stateKey][object.stateIndex-1][0], 
+            object.options.height * states[object.stateKey][object.stateIndex-1][1],
+            object.options.width,
+            object.options.height, 
+            position.x,
+            position.y,
+            object.options.width,
+            object.options.height
+        );
 
     };
 
