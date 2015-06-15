@@ -2,7 +2,6 @@
 var app = window.app || {};
 var basicProtos = app.basicProtos = app.basicProtos || {};
 
-var data = app.data || {};
 /* 
 	service for controling animations
 	init draw, create objects, check collision, run animation loop, having enemies, weapons collections and init destroy or hide it
@@ -10,18 +9,8 @@ var data = app.data || {};
 */
 basicProtos.AnimationService =  (function() {
 	function AnimationService(options) {
-		var defaults = {
-			enemyWidth: 100,
-			enemyHeight: 80,
-			enemyCols: 8,
-			enemyPerCol: 3,
-			enemyMovementStep: 2,
-			enemyMovementSpeed: 1000,
-			weaponDebounce: 400,
-			weaponStep: 5,
-			weaponSpeed: 50
-		};
-		this.init(_.merge(defaults, options));
+		var defaults = app.config.config.animation || {};
+		this.init(_.merge({}, defaults, options));
 	}
 
 	AnimationService.prototype.init = function(options, reinit) {
@@ -164,7 +153,7 @@ basicProtos.AnimationService =  (function() {
 			var enemyCol = [];
 			for(var j=0; j < self.options.enemyPerCol; j++) {
 			    var enemy =  new app.basicProtos.CanvasObject({
-			        imageSrc: data.enemy.imageSrc,
+			        imageSrc: app.config.enemy.imageSrc,
 			        animationService: self,
 			        area: [cellWidth*i, j*cellHeight, cellWidth*(i+1), j*cellHeight+cellHeight]
 			    });
@@ -176,7 +165,7 @@ basicProtos.AnimationService =  (function() {
 	}
 
 	function generateWeapon(isHero) {
-		var src = isHero ? data.weapon.imageSrc : data.enemyWeapon.imageSrc
+		var src = isHero ? app.config.weapon.imageSrc : app.config.enemyWeapon.imageSrc
 		return new app.basicProtos.CanvasObject({
             imageSrc: src,
             animationService: this,
@@ -187,7 +176,7 @@ basicProtos.AnimationService =  (function() {
 	function createHero() {
 		var field = this.canvasService.options.field;
 		return app.hero = new app.basicProtos.CanvasObject({
-	        imageSrc: data.hero.imageSrc,
+	        imageSrc: app.config.hero.imageSrc,
 	        animationService: this,
 	        isHero: true,
 	        area: [0, field.height-80, field.width, field.height]

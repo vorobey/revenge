@@ -1,24 +1,44 @@
 app = window.app || {};
 
 $(function() {
-    //get canvas DOM-object and init service for canvas operations
-    var field = document.getElementById('battlefield');
-    var canvasService = app.service = new app.basicProtos.CanvasOperations({
-        field: field,
-        ctx: field.getContext('2d'),
-        width: field.width,
-        height: field.height
-    });
+    var field = document.getElementById('battlefield'),
+        animationService, canvasService;
+
+    //get config and then init all
+    $.ajax({
+        url: '../assets/files/data.json',
+        isLocal: true,
+        method: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            app.config = res;
+            console.log('success', res)
+            letsPartyStarted();
+        }
+    })
+
+    function letsPartyStarted() {
+        //init service for canvas operations
+        canvasService = app.service = new app.basicProtos.CanvasOperations({
+            field: field,
+            ctx: field.getContext('2d'),
+            width: field.width,
+            height: field.height
+        });
+
+        //init animation service
+        animationService = app.animationService = new app.basicProtos.AnimationService({
+            service: canvasService
+            //options
+        });
+        //and then run it
+        animationService.run();
+    }
+
 
     var count = 0;
     var countContainers = $('.count .val');
 
-    //init animation service
-    var animationService = app.animationService = new app.basicProtos.AnimationService({
-        service: canvasService
-        //options
-    });
-    animationService.run();
 
     document.addEventListener('fail', function(e) {
         $('body').addClass('fail');

@@ -11,15 +11,8 @@ basicProtos.CanvasObject =  (function() {
     // construct function
     function CanvasObject(options, letter) {
         //defalt options
-        var defaults = {
-            x: 0,
-            y: 0,
-            area: [],
-            centered: true,
-            width: 100,
-            height: 100
-        };
-        this.init(_.merge(defaults, options), letter);
+        var defaults = app.config.config.object;
+        this.init(_.merge({}, defaults, options), letter);
     }
 
     CanvasObject.prototype.init = function(options) {
