@@ -1,0 +1,224 @@
+@mixin box-sizing($sizing)
+	box-sizing: $sizing
+	-webkit-box-sizing: $sizing
+	-moz-box-sizing: $sizing
+
+@mixin transition($transition)
+	-webkit-transition: $transition
+	-moz-transition: $transition
+	-ms-transition: $transition
+	-o-transition: $transition
+	transition: $transition
+
+
+canvas
+	margin: 20px auto
+	display: block
+
+body
+	background: url(../images/bg.jpg) no-repeat center
+	background-size: cover
+	height: 100%
+	margin: 0
+	font-family: 'Ubuntu', sans-serif
+	&.win
+		.overlay
+			opacity: 1
+			.image
+				background: url(../images/win.gif) no-repeat center
+				background-size: cover
+			.if-fail
+				display: none
+	&.fail
+		.overlay
+			opacity: 1
+			.image
+				width: 100%
+				height: 400px
+				margin-bottom: 10px
+				background: url(../images/fail.gif) no-repeat center
+				background-size: cover
+		.if-win
+			display: none
+
+.overlay
+	position: fixed
+	width: 100%
+	height: 100%
+	left: 0
+	top: 0
+	background: rgba(0,0,0,.5)
+	display: table
+	opacity: 0
+	transition: all .5s
+	color: white
+	font-size: 25px
+	.popup-row
+		display: table-row
+		.popup-cell
+			text-align: center
+			display: table-cell
+			vertical-align: middle
+	.popup-inner
+		width: 800px
+		display: inline-block
+		text-align: left
+	.image
+		width: 250px
+		height: 600px
+		float: left
+		margin-right: 20px
+	.count 
+		margin: 10px 0
+	.btn
+		font-size: 16px
+		cursor: pointer
+		border: 1px solid white
+		transition: all .5s
+		display: inline-block
+		padding: 5px 10px
+		&:hover
+			background: white
+			color: black
+
+.hud
+	color: white
+
+
+
+
+//styles for markup test
+.markup-test
+	background: #f7f9fa none
+	color: #5a5a5a
+	
+	h2
+		font-size: 18px
+		text-transform: uppercase
+	.container
+		width: 1024px
+		margin: 0 auto
+
+	table
+		border: 1px solid #bfbfbf
+		border-radius: 4px
+		width: 100%
+		border-spacing: 0
+		overflow: hidden
+		// border-collapse: collapse
+		tr
+			background: #fbfbfb
+			&:nth-child(odd)
+				background: white
+		th, td
+			vertical-align: middle
+			border-bottom: 1px solid #d8d9da
+			text-align: right
+			padding: 5px 20px
+			&.align-left
+				text-align: left
+				padding: 5px 10px
+		th
+			background: #ecf0f3
+			color: #545454
+			font-weight: 400
+		td
+			font-size: 16px
+			font-weight: 500
+
+	.user
+		position: relative
+		@include box-sizing(border-box)
+		padding-left: 60px
+		min-height: 50px
+		position: relative
+		width: 100%
+		.ava
+			position: absolute
+			left: 0
+			height: 50px
+			width: 50px
+			top: 0
+			border-radius: 3px
+			overflow: hidden
+		.name
+			font-size: 14px
+			color: #2c76c7
+			margin-bottom: 5px
+			font-weight: 500
+			line-height: 18px
+		.progress
+			i
+				color: #b6b6b6
+		.follow-toggler
+			background: #b6b6b6
+			color: white
+			width: 18px
+			height: 18px
+			border-radius: 9px
+			cursor: pointer
+			display: inline-block
+			margin-left: 10px
+			line-height: 18px
+			font-size: 13px
+			padding: 0 4px
+			position: relative
+			vertical-align: top
+			@include box-sizing(border-box)
+			@include transition(all .5s)
+			overflow: hidden
+			> span
+				height: 100%
+
+			.text
+				opacity: 0
+				text-transform: capitalize
+				width: 0
+				height: 0
+				overflow: hidden
+				display: inline-block
+				vertical-align: top
+				@include transition(all .5s)
+			i
+				opacity: 1
+				@include transition(all .5s)
+
+			.unfollow
+				display: none
+			&:hover
+				background: #a4c574
+				width: auto
+				height: auto
+				padding: 0 5px
+				.text
+					opacity: 1
+					position: relative
+					z-index: 1
+					width: auto
+					height: auto
+				i
+					opacity: 0
+					width: 0
+					height: 0
+					overflow: hidden
+					display: inline-block
+		&.following
+			.follow-toggler
+				background: #a4c574
+
+				.follow
+					display: none
+				.unfollow
+					display: inline-block
+				
+				&:hover
+					background: red
+
+
+
+	
+
+
+
+
+
