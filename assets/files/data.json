@@ -2,8 +2,8 @@
 
 	"config": {
 		"animation": {
-			"enemyWidth": 100,
-			"enemyHeight": 80,
+			"enemyWidth": 35,
+			"enemyHeight": 40,
 			"enemyCols": 8,
 			"enemyPerCol": 3,
 			"enemyMovementStep": 2,
