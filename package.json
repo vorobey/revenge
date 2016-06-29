@@ -4,18 +4,26 @@
   "description": "Простенькая игрушка на Canvas. Выросла из тестового задания, решил впоследствии потихоньку допиливать функционал, улучшать внешний вид игры и отачивать мастерство яваскриптинга.",
   "main": "index.js",
   "dependencies": {
-    "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
-    "gulp-concat": "^2.6.0",
-    "gulp-connect": "^4.1.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.3.2",
-    "gulp-sourcemaps": "^1.6.0"
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.9.0",
+    "raw-loader": "^0.5.1",
+    "sass-loader": "^4.0.0",
+    "url-loader": "^0.5.7",
+    "webpack-dev-server": "^1.14.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.10.1",
+    "babel-core": "^6.10.4",
+    "babel-loader": "^6.2.4",
     "babel-polyfill": "^6.9.1",
-    "babel-preset-es2015": "^6.9.0"
+    "babel-preset-es2015": "^6.9.0",
+    "copy-webpack-plugin": "^3.0.1",
+    "css-loader": "^0.23.1",
+    "jshint": "^2.9.2",
+    "jshint-loader": "^0.8.3",
+    "node-libs-browser": "^1.0.0",
+    "path": "^0.12.7",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.1"
   },
   "babel": {
     "presets": [
@@ -23,13 +31,13 @@
     ]
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack-dev-server"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vorobey/revenge.git"
   },
-  "author": "",
+  "author": "vorobey",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/vorobey/revenge/issues"
