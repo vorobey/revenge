@@ -1,9 +1,15 @@
 'use strict';
 
 import 'babel-polyfill';
+import { map, game } from 'json!../files/data.json';
 
-require("../sass/style.sass");
+import {GameService} from './game/gameService';
 
-import {GameService} from './core/index';
 
-console.log(GameService);
+
+window.onload = () => {
+    let gameService = new GameService({
+        map: map,
+        game: game
+    });
+};

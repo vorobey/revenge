@@ -1,7 +1,15 @@
 var CopyWebpackPlugin = require('copy-webpack-plugin');
-var path = require('path');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
+const METADATA =  {
+    host: 'localhost',
+    port: 5067,
+    ENV: ENV
+};
+
 module.exports = {
+
     entry: './assets/js/app.js',
     output: {
         filename: './dist/js/app.js'
@@ -22,6 +30,16 @@ module.exports = {
                 loader: ExtractTextPlugin.extract("style", "raw!sass")
             }
         ]
+    },
+    devServer: {
+        port: METADATA.port,
+        host: METADATA.host,
+        historyApiFallback: true,
+        watchOptions: {
+            aggregateTimeout: 300,
+            poll: 1000
+        },
+        outputPath: './dist'
     },
     plugins: [
         new CopyWebpackPlugin([

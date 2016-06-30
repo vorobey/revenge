@@ -1,40 +1,9 @@
 {
-
-	"config": {
-		"animation": {
-			"enemyWidth": 35,
-			"enemyHeight": 40,
-			"enemyCols": 8,
-			"enemyPerCol": 3,
-			"enemyMovementStep": 2,
-			"enemyMovementSpeed": 1000,
-			"weaponDebounce": 400,
-			"weaponStep": 5,
-			"weaponSpeed": 50
-		},
-		"object": {
-			"x": 0,
-            "y": 0,
-            "area": [],
-            "centered": "true",
-            "width": 100,
-            "height": 100,
-            "states": {
-            	"default": [[0,0]]
-            }
-		}
+	"map": {
+		"rows": 40,
+		"cols": 50
 	},
-
-	"hero": {
-		"imageSrc": "assets/images/hero.png"
-	},
-	"weapon": {
-		"imageSrc": "assets/images/lightsaber.png"
-	},
-	"enemy": {
-		"imageSrc": "assets/images/enemy_1.png"
-	},
-	"enemyWeapon": {
-		"imageSrc": "assets/images/lightsaber_red.png"
+	"game": {
+		"animationSpeed": 0.5
 	}
 }
