@@ -15,13 +15,16 @@ export class GameMap {
         var rulers = [];
         var thickness = 1;
 
-        for (let i = 0; i < this.config.rows; i++) {
-            rulers.push(new RulerObject({x:i, y:0, height: thickness, width: '100%'}))
-        }
-        for (let i = 0; i < this.config.cols; i++) {
-            rulers.push(new RulerObject({y:i, x:0, height: '100%', width: thickness}))
-        }
+        for (let i = 0; i < canvasOperations.cells.length; i++) {
+            let row = canvasOperations.cells[i];
+            for (let j = 0; j < row.length; j++) {
+                let cell = row[j];
+                rulers.push(new RulerObject({
+                    x:cell[0], y: cell[1], width: canvasOperations.cellWidth, height: canvasOperations.cellHeight
+                }));
+            }
 
+        }
         return rulers;
     }
 }

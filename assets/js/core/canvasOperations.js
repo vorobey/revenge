@@ -23,32 +23,40 @@ export class CanvasOperations {
     }
 
     calculateCells(mapConfig) {
-        this.cells = [];
-        var cellWidth = this.canvas.clientHeight / mapConfig.rows;
-        var cellHeight = this.canvas.clientWidth / mapConfig.cols;
-        console.log(cellHeight, cellWidth);
+        let cells = this.cells = [];
+        var cellWidth = this.cellWidth = this.canvas.clientHeight / mapConfig.rows;
+        var cellHeight = this.cellHeight = this.canvas.clientWidth / mapConfig.cols;
+
+        for (var i = 0; i < mapConfig.rows; i++) {
+            var row =  [];
+            for (var j = 0; j < mapConfig.cols; j++) {
+                let cell = [j * cellWidth, i*cellHeight, (j+1) * cellWidth, (i+1) * cellHeight];
+                row.push(cell);
+            }
+            cells.push(row);
+        }
+
+        console.log(cells);
     }
 
     drawImage(object) {
         if (!this.ctx) {
             return false;
         }
+        let coords = object.row && object.cell ? this.cells[object.row[object.cell]] : [object.x, object.y];
         if (object.width === '100%') {
             object.width = this.canvas.clientWidth;
         }
         if (object.height === '100%') {
             object.height = this.canvas.clientHeight;
         }
-        // //dont draw object out of field. probably should delete it
-        // if ((position.x+object.options.width < 0 || position.x-object.options.width > this.options.width) ||
-        //     (position.y+object.options.height < 0 || position.y-object.options.height > this.options.height )) {
-        //     return false;
-        // }
+
+
         var states = object.options.states;
         this.ctx.drawImage(
             object.image,
-            object.x,
-            object.y
+            coords[0],
+            coords[1]
         );
     }
 
@@ -56,7 +64,6 @@ export class CanvasOperations {
         if (!this.ctx) {
             return false;
         }
-        console.log(object);
         if (object.width === '100%') {
             object.width = this.canvas.clientWidth;
         }
@@ -68,8 +75,15 @@ export class CanvasOperations {
         ctx.beginPath();
         ctx.moveTo(object.x, object.y);
         ctx.lineTo(object.width, object.height);
-        console.log('drawLine');
         ctx.strokeStyle = "white";
+        ctx.stroke();
+    }
+
+    drawRect(object) {
+        if (!this.ctx) { return false; }
+        let ctx = this.ctx;
+        ctx.strokeStyle = "#aaaaaa";
+        ctx.rect(object.x, object.y, object.height, object.width);
         ctx.stroke();
     }
 

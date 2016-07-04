@@ -1,7 +1,7 @@
 {
 	"map": {
-		"rows": 40,
-		"cols": 50
+		"rows": 18,
+		"cols": 24
 	},
 	"game": {
 		"animationSpeed": 0.5
