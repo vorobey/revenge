@@ -16,14 +16,12 @@ export class GameService {
         this.map = new GameMap(config.map);
         var rulers = this.map.buildRulers();
         for (let i = 0; i < rulers.length; i++) {
-            canvasOperations.drawRect(rulers[i]);
+            canvasOperations.draw(rulers[i]);
         }
 
-        let hero = new HeroObject({row: config.map.rows, cols: 10});
-        var image = hero.image = new Image;
-        image.src = 'assets/images/hero.png';
-        image.onload = function() {
-            canvasOperations.drawImage(hero);
-        };
+        let hero = new HeroObject({
+            row: config.map.rows,
+            cols: 10
+        });
     }
 }

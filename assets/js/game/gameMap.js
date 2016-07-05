@@ -1,6 +1,6 @@
 'use strict';
 
-import { RulerObject } from './rulerObject';
+import { SquareObject } from '../core/objects/squareObject';
 
 import { CanvasOperations } from '../core/canvasOperations';
 
@@ -19,12 +19,13 @@ export class GameMap {
             let row = canvasOperations.cells[i];
             for (let j = 0; j < row.length; j++) {
                 let cell = row[j];
-                rulers.push(new RulerObject({
-                    x:cell[0], y: cell[1], width: canvasOperations.cellWidth, height: canvasOperations.cellHeight
+                rulers.push(new SquareObject({
+                    col: j, row: i
                 }));
             }
 
         }
+        console.log(rulers);
         return rulers;
     }
 }

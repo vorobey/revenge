@@ -1,9 +1,9 @@
-export class HeroObject {
+import { ImageObject } from '../core/objects/imageObject';
+
+export class HeroObject extends ImageObject {
     imageUrl = 'assets/images/heroObj';
-    height = 1;
-    width = 1;
 
-    constructor() {
-
+    constructor(props) {
+        super(props);
     }
 }

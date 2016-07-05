@@ -30,56 +30,60 @@ export class CanvasOperations {
         for (var i = 0; i < mapConfig.rows; i++) {
             var row =  [];
             for (var j = 0; j < mapConfig.cols; j++) {
-                let cell = [j * cellWidth, i*cellHeight, (j+1) * cellWidth, (i+1) * cellHeight];
+                let cell = {
+                    x: j * cellWidth,
+                    y: i*cellHeight,
+                    x1: (j + 1) * cellWidth,
+                    y1: (i + 1) * cellHeight
+                };
                 row.push(cell);
             }
             cells.push(row);
         }
     }
 
-    drawImage(object) {
+    draw(object) {
         if (!this.ctx) {
             return false;
         }
-        let coords = object.row && object.col ? this.cells[object.row-1][object.col-1] : [object.x, object.y];
-        if (object.width === '100%') {
-            object.width = this.canvas.clientWidth;
-        }
-        if (object.height === '100%') {
-            object.height = this.canvas.clientHeight;
-        }
+        let coords = this.cells[object.row][object.col];
+        let width = object.width * this.cellWidth;
+        let height = object.height * this.cellHeight;
 
+        switch (object.type) {
+            case 'image':
+                this.drawImage(object, coords, width, height);
+            break;
+            case 'square':
+                this.drawRect(object, coords, width, height);
+            break;
+            default:
+                this.drawLine(object, coords, width, height);
+        }
+    }
+
+    drawImage(object, coords, width, height) {
         this.ctx.drawImage(
             object.image,
-            coords[0],
-            coords[1]
+            coords.x,
+            coords.y,
+            width,
+            height
         );
     }
 
-    drawLine(object) {
-        if (!this.ctx) {
-            return false;
-        }
-        if (object.width === '100%') {
-            object.width = this.canvas.clientWidth;
-        }
-        if (object.height === '100%') {
-            object.height = this.canvas.clientHeight;
-        }
+    drawLine(object, coords, width, height) {
         let ctx = this.ctx;
-
         ctx.beginPath();
-        ctx.moveTo(object.x, object.y);
-        ctx.lineTo(object.width, object.height);
-        ctx.strokeStyle = "white";
+        ctx.moveTo(coords.x, coords.y);
+        ctx.lineTo(width.width, height.height);
+        ctx.strokeStyle = object.color || 'white';
         ctx.stroke();
     }
-
-    drawRect(object) {
-        if (!this.ctx) { return false; }
+    drawRect(object, coords, width, height) {
         let ctx = this.ctx;
         ctx.strokeStyle = "#aaaaaa";
-        ctx.rect(object.x, object.y, object.height, object.width);
+        ctx.rect(coords.x, coords.y, height, width);
         ctx.stroke();
     }
 
