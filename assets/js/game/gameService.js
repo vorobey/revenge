@@ -1,7 +1,9 @@
 'use strict';
 
-import {GameMap} from './gameMap';
+import { GameMap } from './gameMap';
 import { CanvasOperations } from '../core/canvasOperations';
+
+import { HeroObject } from '../game/heroObject';
 
 var canvasOperations = CanvasOperations.instance;
 
@@ -16,15 +18,12 @@ export class GameService {
         for (let i = 0; i < rulers.length; i++) {
             canvasOperations.drawRect(rulers[i]);
         }
-        //
-        //draw test image
-        var person = {};
-        var image = person.image = new Image;
-        image.src = 'images/hero.png';
-        image.row = config.map.rows;
-        image.col = 5;
+
+        let hero = new HeroObject({row: config.map.rows, cols: 10});
+        var image = hero.image = new Image;
+        image.src = 'assets/images/hero.png';
         image.onload = function() {
-            canvasOperations.drawImage(person);
-        }
+            canvasOperations.drawImage(hero);
+        };
     }
 }

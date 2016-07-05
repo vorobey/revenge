@@ -35,15 +35,13 @@ export class CanvasOperations {
             }
             cells.push(row);
         }
-
-        console.log(cells);
     }
 
     drawImage(object) {
         if (!this.ctx) {
             return false;
         }
-        let coords = object.row && object.cell ? this.cells[object.row[object.cell]] : [object.x, object.y];
+        let coords = object.row && object.col ? this.cells[object.row-1][object.col-1] : [object.x, object.y];
         if (object.width === '100%') {
             object.width = this.canvas.clientWidth;
         }
@@ -51,8 +49,6 @@ export class CanvasOperations {
             object.height = this.canvas.clientHeight;
         }
 
-
-        var states = object.options.states;
         this.ctx.drawImage(
             object.image,
             coords[0],
