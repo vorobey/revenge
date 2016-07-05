@@ -65,6 +65,10 @@ export class CanvasOperations {
     drawImage(object, coords, width, height) {
         this.ctx.drawImage(
             object.image,
+            0,
+            0,
+            width,
+            height,
             coords.x,
             coords.y,
             width,

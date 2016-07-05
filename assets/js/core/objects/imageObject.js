@@ -21,8 +21,8 @@ export class ImageObject extends BasicObject {
     buildImage() {
         this.image = new Image();
         this.image.src = this.imageUrl;
-        this.image.onload = function () {
-            
+        this.image.onload = ()=> {
+            this.onload && this.onload(this);
         }
     }
 }

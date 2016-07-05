@@ -20,8 +20,11 @@ export class GameService {
         }
 
         let hero = new HeroObject({
-            row: config.map.rows,
-            cols: 10
+            row: config.map.rows-1,
+            col: 10,
+            onload: function (hero) {
+                canvasOperations.draw(hero);
+            }
         });
     }
 }
