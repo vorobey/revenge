@@ -91,6 +91,10 @@ export class CanvasOperations {
         ctx.stroke();
     }
 
+    clearField() {
+        this.ctx.clearRect(0,0,this.canvas.clientWidth, this.canvas.clientHeight)
+    }
+
     erase() {
 
     }
