@@ -1,4 +1,9 @@
 'use strict';
+
+//load vendor shit
+import $ from '../../vendor/jquery';
+import jQuery from '../../vendor/jquery';
+
 //load core services
 import { CanvasOperations } from '../core/canvasOperations';
 import { AnimationService } from '../core/animationService';
@@ -6,23 +11,29 @@ import { AnimationService } from '../core/animationService';
 //load object classes for drawing
 import { GameMap } from './gameMap';
 import { HeroObject } from '../game/heroObject';
+import { EnemyObject } from '../game/enemyObject';
 
 var canvasOperations = CanvasOperations.instance;
 var animationService = AnimationService.instance;
 
 export class GameService {
     constructor(canvas, config) {
+        this.config = config;
+
         canvasOperations.setCanvas(canvas);
         canvasOperations.calculateCells(config.map);
 
-        //only for dev - show cells on canvas
-        this.map = new GameMap(config.map);
-        var rulers = this.map.buildRulers();
-        for (let i = 0; i < rulers.length; i++) {
-            // canvasOperations.draw(rulers[i]);
-            animationService.pushToLoop(rulers[i]);
-        }
+        console.log('gameServiceConstructor');
 
+        //only for dev - show cells on canvas
+        // this.map = new GameMap(config.map);
+        // var rulers = this.map.buildRulers();
+        // for (let i = 0; i < rulers.length; i++) {
+        //     // canvasOperations.draw(rulers[i]);
+        //     animationService.pushToLoop(rulers[i]);
+        // }
+
+        //создаем героя
         let hero = new HeroObject({
             row: config.map.rows-1,
             col: 10,
@@ -30,9 +41,76 @@ export class GameService {
                 // canvasOperations.draw(hero);
                 animationService.pushToLoop(hero);
             }
+        });
+        //запускаем анимационный луп
+        animationService.run();
+        //навешиваем обработчики на клавиши для движения персонажа
+        this.bindKeys(hero);
+        //показываем вражин
+        this.generateEnemies();
+    }
 
+    bindKeys(hero) {
+        const MovementStep = 1;
+        const MovementDelay = 50;
+        let self = this;
+        let movementLeft, movementRight;
+        $(document).on('keydown', (e) => {
+            if (e.keyCode == 37) {
+                if (!movementLeft) {
+                    movementLeft = setInterval(function() {
+                        hero.move(-MovementStep, 0);
+                    }, MovementDelay)
+                }
+            } else if (e.keyCode == 39) {
+                if (!movementRight) {
+                    movementRight = setInterval(function() {
+                        hero.move(MovementStep, 0);
+                    }, MovementDelay)
+                }
+            } else if (e.keyCode == 32) {
+                if (!self.weaponTmt) {
+                    hero.shoot();
+                }
+            }
         });
 
-        animationService.run();
+        $(document).on('keyup', (e)=> {
+            if (e.keyCode == 37) {
+                clearInterval(movementLeft);
+                movementLeft = null;
+            } else if (e.keyCode == 39) {
+                clearInterval(movementRight);
+                movementRight = null;
+            } else if (e.keyCode == 32) {
+                if (!self.weaponTmt) {
+                    releaseTheWeapon.apply(self);
+                }
+            }
+        });
+    }
+
+    //строим матрицу для размещения вражин и размещаим
+    generateEnemies() {
+        //сколько строк карты должно быть заполнено вражинами
+        const EnemiesRowCount = 3;
+        //какое расстояние между вражинами (одна клетка - оптимально, думаю)
+        const EnemiesGap = 1;
+
+        for ( let j = 0; j < this.config.map.cols; j++ ) {
+            for ( let i = 0; i < EnemiesRowCount; i++ ) {
+                let row = i == 0 ? i : i * (EnemiesGap+EnemiesGap);
+                let enemy = new EnemyObject({
+                    col: j,
+                    row: row,
+                    onload: (enemy)=> {
+                        animationService.pushToLoop(enemy);
+                    }
+                });
+            }
+            j += EnemiesGap;
+        }
+
+        return true;
     }
 }

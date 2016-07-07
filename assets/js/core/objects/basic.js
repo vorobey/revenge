@@ -42,4 +42,9 @@ export class BasicObject {
     constructor(props) {
         _.merge(this, props);
     }
+
+    move(x, y) {
+        this.col += x;
+        this.row += y;
+    }
 }

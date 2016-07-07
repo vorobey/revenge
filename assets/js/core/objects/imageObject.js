@@ -11,13 +11,15 @@ export class ImageObject extends BasicObject {
     /*
         @prop imageUrl путь до изображения для объекта
      */
-    imageUrl = 'assets/images/hero.png';
+    get imageUrl() {
+        return 'assets/images/hero.png';
+    }
 
     constructor(props) {
         super(props);
-        this.buildImage();
+        this.buildImage.apply(this);
     }
-    
+
     buildImage() {
         this.image = new Image();
         this.image.src = this.imageUrl;

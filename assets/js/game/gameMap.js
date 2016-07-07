@@ -25,7 +25,6 @@ export class GameMap {
             }
 
         }
-        console.log(rulers);
         return rulers;
     }
 }
