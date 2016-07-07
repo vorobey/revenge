@@ -46,7 +46,14 @@ export class CanvasOperations {
         if (!this.ctx) {
             return false;
         }
-        let coords = this.cells[object.row][object.col];
+        let row = this.cells[object.row];
+        let coords = row ? row[object.col] : null;
+
+        if (!row || !coords) {
+            object.isHidden = true;
+            return false;
+        }
+
         let width = object.width * this.cellWidth;
         let height = object.height * this.cellHeight;
 

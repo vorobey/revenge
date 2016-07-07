@@ -53,6 +53,7 @@ export class AnimationService {
     render() {
         canvasOperations.clearField();
         _.each(this.loop,(item, index) => {
+            if (item.isHidden) return;
            canvasOperations.draw(item);
         });
         // var enemy = getRandomEnemyForShoot(self.enemies, self.enemies.length);

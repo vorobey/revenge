@@ -35,7 +35,7 @@ export class GameService {
 
         //создаем героя
         let hero = new HeroObject({
-            row: config.map.rows-1,
+            row: config.map.rows-3,
             col: 10,
             onload: function (hero) {
                 // canvasOperations.draw(hero);
@@ -54,7 +54,13 @@ export class GameService {
         const MovementStep = 1;
         const MovementDelay = 50;
         let self = this;
-        let movementLeft, movementRight;
+        let movementLeft, movementRight, shootTmt;
+        let setShootTmt = ()=> {
+            shootTmt =  setTimeout(()=> {
+                clearTimeout(shootTmt);
+                shootTmt = null;
+            }, 1000);
+        };
         $(document).on('keydown', (e) => {
             if (e.keyCode == 37) {
                 if (!movementLeft) {
@@ -69,8 +75,9 @@ export class GameService {
                     }, MovementDelay)
                 }
             } else if (e.keyCode == 32) {
-                if (!self.weaponTmt) {
-                    hero.shoot();
+                if (!shootTmt) {
+                    this.startWeaponMove(hero);
+                    setShootTmt();
                 }
             }
         });
@@ -83,11 +90,14 @@ export class GameService {
                 clearInterval(movementRight);
                 movementRight = null;
             } else if (e.keyCode == 32) {
-                if (!self.weaponTmt) {
-                    releaseTheWeapon.apply(self);
+                if (!shootTmt) {
+                    this.startWeaponMove(hero);
+                    setShootTmt();
                 }
             }
         });
+
+
     }
 
     //строим матрицу для размещения вражин и размещаим
@@ -95,7 +105,9 @@ export class GameService {
         //сколько строк карты должно быть заполнено вражинами
         const EnemiesRowCount = 3;
         //какое расстояние между вражинами (одна клетка - оптимально, думаю)
-        const EnemiesGap = 1;
+        const EnemiesGap = 2;
+
+        let enemies = [];
 
         for ( let j = 0; j < this.config.map.cols; j++ ) {
             for ( let i = 0; i < EnemiesRowCount; i++ ) {
@@ -107,10 +119,35 @@ export class GameService {
                         animationService.pushToLoop(enemy);
                     }
                 });
+
+                enemies.push(enemy);
             }
             j += EnemiesGap;
         }
 
+        // this.startEnemiesMoving(enemies);
+
         return true;
+    }
+
+    startEnemiesMoving(enemies) {
+        const MovingSpeed = 1500;
+        const MovingStep = 1;
+        let interval = setInterval(()=> {
+            for (let i = 0; i < enemies.length; i++) {
+                enemies[i].move(0, 1);
+            }
+        }, MovingSpeed);
+    }
+
+    startWeaponMove(hero) {
+        const speed = 1;
+        let newWeapon = hero.shoot(()=> {
+            animationService.pushToLoop(newWeapon);
+        });
+
+        newWeapon.movingInterval = setInterval(()=>{
+            newWeapon.move(0, -speed);
+        }, 300);
     }
 }
