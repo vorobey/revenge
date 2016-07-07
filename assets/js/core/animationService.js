@@ -36,6 +36,7 @@ export class AnimationService {
         let fps, delta;
         this.animId = window.requestAnimationFrame(this.doAnimationLoop.bind(this));
         this.render();
+        // this.checkCollisions();
         //update fps counter
         if (!this.lastCalledTime) {
             this.lastCalledTime = Date.now();
@@ -49,6 +50,9 @@ export class AnimationService {
         fpsEvent.initCustomEvent("updateFPS", true, true, {'value': fps});
         document.dispatchEvent(fpsEvent)
     }
+
+
+    
 
     render() {
         canvasOperations.clearField();

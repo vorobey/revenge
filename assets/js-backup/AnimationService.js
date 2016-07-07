@@ -329,7 +329,7 @@ basicProtos.AnimationService =  (function() {
 	        		releaseTheWeapon.apply(self, [self.hero]);
 	        	}
 	        }
-	    })
+	    });
 
 	    $(document).on('keyup', function(e) {
 	        if (e.keyCode == 37) {

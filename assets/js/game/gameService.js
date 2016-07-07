@@ -139,7 +139,7 @@ export class GameService {
             }
         }, MovingSpeed);
     }
-
+    
     startWeaponMove(hero) {
         const speed = 1;
         let newWeapon = hero.shoot(()=> {

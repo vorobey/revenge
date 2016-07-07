@@ -102,7 +102,21 @@ export class CanvasOperations {
         this.ctx.clearRect(0,0,this.canvas.clientWidth, this.canvas.clientHeight)
     }
 
-    erase() {
+    checkCollision(object1, object2) {
+        let pos1 = {
+            top: object1.row,
+            bottom: object1.row + object1.height,
+            left: object1.col,
+            right: object1.col + object1.width
+        };
+        let pos2 = {
+            top: object2.row,
+            bottom: object2.row + object2.height,
+            left: object2.col,
+            right: object2.col + object2.width
+        };
+
+        return !(pos1.left > pos2.right || pos2.left > pos1.right || pos1.top > pos2.bottom || pos2.top > pos1.bottom);
 
     }
 }
