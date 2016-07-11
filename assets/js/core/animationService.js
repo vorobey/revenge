@@ -7,9 +7,17 @@ var canvasOperations = CanvasOperations.instance;
 let singleton = Symbol();
 let singletonEnforcer = Symbol();
 
+/*
+    @class AnimationService сервис для контроля за работой анимации
+ */
+
 export class AnimationService {
+    /*
+        
+     */
     loop = [];
     lastCalledTime = Date.now();
+    collisionStructures = [];
 
     constructor(enforcer) {
         if (enforcer !== singletonEnforcer) {
@@ -36,7 +44,7 @@ export class AnimationService {
         let fps, delta;
         this.animId = window.requestAnimationFrame(this.doAnimationLoop.bind(this));
         this.render();
-        // this.checkCollisions();
+
         //update fps counter
         if (!this.lastCalledTime) {
             this.lastCalledTime = Date.now();
@@ -52,7 +60,26 @@ export class AnimationService {
     }
 
 
-    
+    checkCollisions() {
+        // console.log(this.collisionStructures);
+        let indexesToRemove = [];
+        for (let i = 0; i < this.collisionStructures.length; i++) {
+            indexesToRemove = [];
+            let structure = this.collisionStructures[i];
+            for (let j = 0; j < structure.with.length; j ++) {
+                if (canvasOperations.checkCollision(structure.who, structure.with[j])) {
+                    structure.what(structure.with[j]);
+                    indexesToRemove.push(i);
+                }
+            }
+        }
+
+        for(let i = 0; i < indexesToRemove.length; i++) {
+            console.log(indexesToRemove[i]);
+            this.collisionStructures.splice(indexesToRemove[i], 1);
+        }
+    }
+
 
     render() {
         canvasOperations.clearField();
@@ -60,9 +87,7 @@ export class AnimationService {
             if (item.isHidden) return;
            canvasOperations.draw(item);
         });
-        // var enemy = getRandomEnemyForShoot(self.enemies, self.enemies.length);
-        // enemy.changeState();
-        // app.hero.changeState();
-        // checkCollision.apply(self);
+
+        this.checkCollisions();
     }
 }

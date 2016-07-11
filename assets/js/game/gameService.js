@@ -34,7 +34,7 @@ export class GameService {
         // }
 
         //создаем героя
-        let hero = new HeroObject({
+        let hero = this.hero = new HeroObject({
             row: config.map.rows-3,
             col: 10,
             onload: function (hero) {
@@ -107,7 +107,7 @@ export class GameService {
         //какое расстояние между вражинами (одна клетка - оптимально, думаю)
         const EnemiesGap = 2;
 
-        let enemies = [];
+        let enemies = this.enemies = [];
 
         for ( let j = 0; j < this.config.map.cols; j++ ) {
             for ( let i = 0; i < EnemiesRowCount; i++ ) {
@@ -127,6 +127,14 @@ export class GameService {
 
         // this.startEnemiesMoving(enemies);
 
+        // animationService.collisionStructures.push({
+        //     who: this.hero,
+        //     with: enemies,
+        //     what: function () {
+        //         console.log('game over');
+        //     }
+        // });
+
         return true;
     }
 
@@ -144,6 +152,17 @@ export class GameService {
         const speed = 1;
         let newWeapon = hero.shoot(()=> {
             animationService.pushToLoop(newWeapon);
+        });
+
+        animationService.collisionStructures.push({
+            who: newWeapon,
+            with: this.enemies,
+            what: function (enemy) {
+                enemy.isHidden = true;
+                clearInterval(newWeapon.movingInterval);
+                newWeapon.movingInterval = null;
+                newWeapon.isHidden = true;
+            }
         });
 
         newWeapon.movingInterval = setInterval(()=>{
