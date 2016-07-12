@@ -127,14 +127,6 @@ export class GameService {
 
         // this.startEnemiesMoving(enemies);
 
-        // animationService.collisionStructures.push({
-        //     who: this.hero,
-        //     with: enemies,
-        //     what: function () {
-        //         console.log('game over');
-        //     }
-        // });
-
         return true;
     }
 
@@ -154,19 +146,33 @@ export class GameService {
             animationService.pushToLoop(newWeapon);
         });
 
-        animationService.collisionStructures.push({
-            who: newWeapon,
-            with: this.enemies,
-            what: function (enemy) {
-                enemy.isHidden = true;
-                clearInterval(newWeapon.movingInterval);
-                newWeapon.movingInterval = null;
-                newWeapon.isHidden = true;
-            }
-        });
-
         newWeapon.movingInterval = setInterval(()=>{
             newWeapon.move(0, -speed);
         }, 300);
+    }
+
+    buildCollisionRules() {
+        animationService.collisionRules['heroWeapon'] = {
+            with: 'enemy',
+            what: (enemy, weapon) => {
+                enemy.remove();
+                weapon.remove();
+
+            }
+        };
+
+        animationService.collisionRules['enemyWeapon'] = {
+            with: 'hero',
+            what: (hero, enemy) => {
+                console.log('end of the game');
+            }
+        };
+
+        animationService.collisionRules['enemy'] = {
+            with: 'hero',
+            what: (hero, weapon) => {
+
+            }
+        }
     }
 }

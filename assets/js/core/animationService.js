@@ -17,7 +17,7 @@ export class AnimationService {
      */
     loop = [];
     lastCalledTime = Date.now();
-    collisionStructures = [];
+    collisionRules = {};
 
     constructor(enforcer) {
         if (enforcer !== singletonEnforcer) {
@@ -59,35 +59,33 @@ export class AnimationService {
         document.dispatchEvent(fpsEvent)
     }
 
+    /*
+        @method checkCollisions проверка объектов из лупа на коллизии
+                @todo: оптимизировать, минимизируя лишние вычисления
+     */
 
     checkCollisions() {
-        // console.log(this.collisionStructures);
-        let indexesToRemove = [];
-        for (let i = 0; i < this.collisionStructures.length; i++) {
-            indexesToRemove = [];
-            let structure = this.collisionStructures[i];
-            for (let j = 0; j < structure.with.length; j ++) {
-                if (canvasOperations.checkCollision(structure.who, structure.with[j])) {
-                    structure.what(structure.with[j]);
-                    indexesToRemove.push(i);
-                }
-            }
-        }
+        for(let i = 0; i < this.loop.length; i++) {
+            let currObj = this.loop[i];
+            for (let j = 0; j < this.loop.length; j++) {
+                if (j == i) continue;
+                let compareObj = this.loop[j];
+                if (canvasOperations.checkCollision(currObj, compareObj)) {
+                    //смотрим что за объекты, сопоставляем с collisionRules
 
-        for(let i = 0; i < indexesToRemove.length; i++) {
-            console.log(indexesToRemove[i]);
-            this.collisionStructures.splice(indexesToRemove[i], 1);
+                }
+
+            }
         }
     }
 
-
     render() {
+        this.checkCollisions();
+
         canvasOperations.clearField();
         _.each(this.loop,(item, index) => {
             if (item.isHidden) return;
            canvasOperations.draw(item);
         });
-
-        this.checkCollisions();
     }
 }
