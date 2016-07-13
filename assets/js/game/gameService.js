@@ -12,40 +12,38 @@ import { AnimationService } from '../core/animationService';
 import { GameMap } from './gameMap';
 import { HeroObject } from '../game/heroObject';
 import { EnemyObject } from '../game/enemyObject';
+import { ObjectCollection } from '../core/objects/objectCollection';
+import { CollisionRules } from '../core/collisionRules';
 
 var canvasOperations = CanvasOperations.instance;
 var animationService = AnimationService.instance;
 
 export class GameService {
     constructor(canvas, config) {
-        this.config = config;
+        console.log('gameServiceConstructor init');
 
+        this.config = config;
         canvasOperations.setCanvas(canvas);
         canvasOperations.calculateCells(config.map);
-
-        console.log('gameServiceConstructor');
-
-        //only for dev - show cells on canvas
-        // this.map = new GameMap(config.map);
-        // var rulers = this.map.buildRulers();
-        // for (let i = 0; i < rulers.length; i++) {
-        //     // canvasOperations.draw(rulers[i]);
-        //     animationService.pushToLoop(rulers[i]);
-        // }
 
         //создаем героя
         let hero = this.hero = new HeroObject({
             row: config.map.rows-3,
             col: 10,
             onload: function (hero) {
-                // canvasOperations.draw(hero);
-                animationService.pushToLoop(hero);
+                animationService.objects.hero.addOne(hero);
             }
         });
+        animationService.objects.hero = new ObjectCollection();
+
+        this.buildCollisionRules();
+
         //запускаем анимационный луп
         animationService.run();
+
         //навешиваем обработчики на клавиши для движения персонажа
         this.bindKeys(hero);
+
         //показываем вражин
         this.generateEnemies();
     }
@@ -96,8 +94,6 @@ export class GameService {
                 }
             }
         });
-
-
     }
 
     //строим матрицу для размещения вражин и размещаим
@@ -116,14 +112,15 @@ export class GameService {
                     col: j,
                     row: row,
                     onload: (enemy)=> {
-                        animationService.pushToLoop(enemy);
+                        animationService.objects.enemies.addOne(enemy);
                     }
                 });
-
                 enemies.push(enemy);
             }
             j += EnemiesGap;
         }
+
+        animationService.objects.enemies = animationService.objects.enemies || new ObjectCollection();
 
         // this.startEnemiesMoving(enemies);
 
@@ -143,7 +140,8 @@ export class GameService {
     startWeaponMove(hero) {
         const speed = 1;
         let newWeapon = hero.shoot(()=> {
-            animationService.pushToLoop(newWeapon);
+            animationService.objects.heroWeapon = animationService.objects.heroWeapon || new ObjectCollection();
+            animationService.objects.heroWeapon.addOne(newWeapon);
         });
 
         newWeapon.movingInterval = setInterval(()=>{
@@ -152,27 +150,18 @@ export class GameService {
     }
 
     buildCollisionRules() {
-        animationService.collisionRules['heroWeapon'] = {
-            with: 'enemy',
-            what: (enemy, weapon) => {
-                enemy.remove();
-                weapon.remove();
+        animationService.collisionRules.push(new CollisionRules('hero', 'enemy', function ( hero, enemy) {
+            console.log('end of the game')
+        }));
 
-            }
-        };
+        animationService.collisionRules.push(new CollisionRules('heroWeapon', 'enemy', function ( weapon, enemy ) {
+            console.log('enemy collide with hero weapon');
+            weapon.object.remove();
+            enemy.object.remove();
+        }));
 
-        animationService.collisionRules['enemyWeapon'] = {
-            with: 'hero',
-            what: (hero, enemy) => {
-                console.log('end of the game');
-            }
-        };
-
-        animationService.collisionRules['enemy'] = {
-            with: 'hero',
-            what: (hero, weapon) => {
-
-            }
-        }
+        animationService.collisionRules.push(new CollisionRules('hero', 'enemyWeapon', function ( hero, enemyWeapon ) {
+            console.log('end of the game');
+        }))
     }
 }

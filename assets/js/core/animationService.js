@@ -15,9 +15,9 @@ export class AnimationService {
     /*
         
      */
-    loop = [];
+    objects = {};
     lastCalledTime = Date.now();
-    collisionRules = {};
+    collisionRules = [];
 
     constructor(enforcer) {
         if (enforcer !== singletonEnforcer) {
@@ -35,11 +35,7 @@ export class AnimationService {
     run() {
         this.doAnimationLoop();
     }
-
-    pushToLoop(object) {
-        this.loop.push(object);
-    }
-
+    
     doAnimationLoop() {
         let fps, delta;
         this.animId = window.requestAnimationFrame(this.doAnimationLoop.bind(this));
@@ -65,18 +61,33 @@ export class AnimationService {
      */
 
     checkCollisions() {
-        for(let i = 0; i < this.loop.length; i++) {
-            let currObj = this.loop[i];
-            for (let j = 0; j < this.loop.length; j++) {
-                if (j == i) continue;
-                let compareObj = this.loop[j];
-                if (canvasOperations.checkCollision(currObj, compareObj)) {
-                    //смотрим что за объекты, сопоставляем с collisionRules
-
-                }
-
+        _.each(this.collisionRules, (rules, index) => {
+            let collectionForCompare = this.objects[rules.who];
+            let collectionToCompare = this.objects[rules.withWho];
+            if (!collectionForCompare || !collectionToCompare) {
+                return false;
             }
-        }
+            let array1 = collectionForCompare.getAll();
+            let array2 = collectionToCompare.getAll();
+            for(let i = 0; i < array1.length; i++ ) {
+                let object1 = array1[i];
+                for(let j = 0; j < array2.length; j++ ) {
+                    let object2 = array2[j];
+                    if (canvasOperations.checkCollisions(object1, object2)) {
+                        rules.what && rules.what({
+                            collection: collectionForCompare,
+                            object: object1,
+                            index: i
+                        },
+                        {
+                            collection: collectionToCompare,
+                            object: object2,
+                            index: j
+                        })
+                    }
+                }
+            }
+        });
     }
 
     render() {
