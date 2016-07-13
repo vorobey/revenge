@@ -8,6 +8,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
     "json-loader": "^0.5.4",
+    "node-sass": "^3.8.0",
     "raw-loader": "^0.5.1",
     "sass-loader": "^4.0.0",
     "url-loader": "^0.5.7",
@@ -33,7 +34,9 @@
       "es2015",
       "stage-0"
     ],
-    "plugins": ["transform-class-properties"]
+    "plugins": [
+      "transform-class-properties"
+    ]
   },
   "scripts": {
     "start": "webpack-dev-server"
