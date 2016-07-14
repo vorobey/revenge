@@ -150,14 +150,17 @@ export class GameService {
     }
 
     buildCollisionRules() {
-        animationService.collisionRules.push(new CollisionRules('hero', 'enemy', function ( hero, enemy) {
+        animationService.collisionRules.push(new CollisionRules('hero', 'enemies', function ( hero, enemy) {
             console.log('end of the game')
         }));
 
-        animationService.collisionRules.push(new CollisionRules('heroWeapon', 'enemy', function ( weapon, enemy ) {
-            console.log('enemy collide with hero weapon');
-            weapon.object.remove();
-            enemy.object.remove();
+        animationService.collisionRules.push(new CollisionRules('heroWeapon', 'enemies', function ( weapon, enemy ) {
+            clearInterval(weapon.object.movingInterval);
+            weapon.object.movingInterval = null;
+            weapon.object.hide();
+            enemy.object.hide();
+            weapon.collection.removeById(weapon.object);
+            enemy.collection.removeByIndex(enemy.index);
         }));
 
         animationService.collisionRules.push(new CollisionRules('hero', 'enemyWeapon', function ( hero, enemyWeapon ) {

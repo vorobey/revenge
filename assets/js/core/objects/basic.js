@@ -13,6 +13,7 @@ export class BasicObject {
      */
     color = 'white';
 
+
     /*
      @prop strokeWidth толщина линии обводки
      */
@@ -41,10 +42,30 @@ export class BasicObject {
      */
     constructor(props) {
         _.merge(this, props);
+        this.id = guid();
+        
+        function guid() {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            }
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                s4() + '-' + s4() + s4() + s4();
+        }
     }
 
     move(x, y) {
         this.col += x;
         this.row += y;
+    }
+
+    remove() {
+        this.hide();
+        this.onRemove = true;
+    }
+
+    hide() {
+        this.isHidden = true;
     }
 }
