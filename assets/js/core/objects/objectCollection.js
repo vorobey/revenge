@@ -25,6 +25,8 @@ export class ObjectCollection {
     }
 
     removeById(item) {
-        this.removeByIndex(_.findIndex(this.collection, (item) => item.id == this.id));
+        this.removeByIndex(_.findIndex(this.collection, (_item) => {
+            return item.id == _item.id;
+        }));
     }
 }

@@ -74,7 +74,7 @@ export class GameService {
                 }
             } else if (e.keyCode == 32) {
                 if (!shootTmt) {
-                    this.startWeaponMove(hero);
+                    this.startHeroWeaponMove(hero);
                     setShootTmt();
                 }
             }
@@ -89,7 +89,7 @@ export class GameService {
                 movementRight = null;
             } else if (e.keyCode == 32) {
                 if (!shootTmt) {
-                    this.startWeaponMove(hero);
+                    this.startHeroWeaponMove(hero);
                     setShootTmt();
                 }
             }
@@ -136,12 +136,15 @@ export class GameService {
             }
         }, MovingSpeed);
     }
+
+    startHeroWeaponMove() {
+        animationService.objects.heroWeapon = animationService.objects.heroWeapon || new ObjectCollection();
+        this.startWeaponMove(this.hero, animationService.objects.heroWeapon);
+    }
     
-    startWeaponMove(hero) {
-        const speed = 1;
-        let newWeapon = hero.shoot(()=> {
-            animationService.objects.heroWeapon = animationService.objects.heroWeapon || new ObjectCollection();
-            animationService.objects.heroWeapon.addOne(newWeapon);
+    startWeaponMove(object, collection, speed = 1, time = 300) {
+        let newWeapon = object.shoot(()=> {
+            collection.addOne(newWeapon);
         });
 
         newWeapon.movingInterval = setInterval(()=>{
