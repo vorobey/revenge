@@ -13,7 +13,6 @@ export class HeroObject extends ImageObject {
     }
 
     shoot(onload) {
-        console.log('shoot');
         return new WeaponObject({row: this.row, col: this.col, onload: onload});
     }
 }

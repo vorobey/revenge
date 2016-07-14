@@ -1,3 +1,5 @@
+'use strict';
+
 import { HeroObject } from './heroObject';
 
 export class EnemyObject extends HeroObject {

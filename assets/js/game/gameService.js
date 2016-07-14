@@ -121,8 +121,10 @@ export class GameService {
         }
 
         animationService.objects.enemies = animationService.objects.enemies || new ObjectCollection();
+        animationService.objects.enemyWeapon = animationService.objects.enemyWeapon || new ObjectCollection();
 
         // this.startEnemiesMoving(enemies);
+        this.startEnemyWeaponMove();
 
         return true;
     }
@@ -140,6 +142,12 @@ export class GameService {
     startHeroWeaponMove() {
         animationService.objects.heroWeapon = animationService.objects.heroWeapon || new ObjectCollection();
         this.startWeaponMove(this.hero, animationService.objects.heroWeapon);
+    }
+
+    startEnemyWeaponMove() {
+        // let enemyWeaponInterval = setInterval(() => {
+        //     this.startWeaponMove(animationService.objects.enemies.collection[0], animationService.objects.enemies);
+        // }, 500);
     }
     
     startWeaponMove(object, collection, speed = 1, time = 300) {
