@@ -36,6 +36,11 @@ export class AnimationService {
         this.doAnimationLoop();
     }
 
+    stop() {
+        window.cancelAnimationFrame(this.animId);
+        this.animId = null;
+    }
+
     doAnimationLoop() {
         let fps, delta;
         this.animId = window.requestAnimationFrame(this.doAnimationLoop.bind(this));
@@ -74,7 +79,6 @@ export class AnimationService {
                 for(let j = 0; j < array2.length; j++ ) {
                     let object2 = array2[j];
                     if (canvasOperations.checkCollision(object1, object2)) {
-
                         rules.what && rules.what({
                             collection: collectionForCompare,
                             object: object1,
@@ -104,4 +108,5 @@ export class AnimationService {
 
         });
     }
+
 }

@@ -123,8 +123,8 @@ export class GameService {
         animationService.objects.enemies = animationService.objects.enemies || new ObjectCollection();
         animationService.objects.enemyWeapon = animationService.objects.enemyWeapon || new ObjectCollection();
 
-        // this.startEnemiesMoving(enemies);
-        this.startEnemyWeaponMove();
+        this.startEnemiesMoving(enemies);
+        // this.startEnemyWeaponMove();
 
         return true;
     }
@@ -162,7 +162,8 @@ export class GameService {
 
     buildCollisionRules() {
         animationService.collisionRules.push(new CollisionRules('hero', 'enemies', function ( hero, enemy) {
-            console.log('end of the game')
+            console.log('end of the game');
+            animationService.stop();
         }));
 
         animationService.collisionRules.push(new CollisionRules('heroWeapon', 'enemies', function ( weapon, enemy ) {
@@ -176,6 +177,12 @@ export class GameService {
 
         animationService.collisionRules.push(new CollisionRules('hero', 'enemyWeapon', function ( hero, enemyWeapon ) {
             console.log('end of the game');
+            animationService.stop();
         }))
     }
+
+    gameEnd() {
+        //очищаем все интервалы и таймауты, останавливаем анимационный луп
+    }
+
 }
