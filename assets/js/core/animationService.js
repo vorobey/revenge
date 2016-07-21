@@ -1,6 +1,7 @@
 'use strict';
 
 import { CanvasOperations } from '../core/canvasOperations';
+import { CollisionService } from '../core/collisionService';
 
 var canvasOperations = CanvasOperations.instance;
 
@@ -17,7 +18,6 @@ export class AnimationService {
      */
     objects = {};
     lastCalledTime = Date.now();
-    collisionRules = [];
 
     constructor(enforcer) {
         if (enforcer !== singletonEnforcer) {
@@ -60,43 +60,9 @@ export class AnimationService {
         document.dispatchEvent(fpsEvent)
     }
 
-    /*
-        @method checkCollisions проверка объектов из лупа на коллизии
-                @todo: оптимизировать, минимизируя лишние вычисления
-     */
-
-    checkCollisions() {
-        _.each(this.collisionRules, (rules, index) => {
-            let collectionForCompare = this.objects[rules.who];
-            let collectionToCompare = this.objects[rules.withWho];
-            if (!collectionForCompare || !collectionToCompare) {
-                return false;
-            }
-            let array1 = collectionForCompare.getAll();
-            let array2 = collectionToCompare.getAll();
-            for(let i = 0; i < array1.length; i++ ) {
-                let object1 = array1[i];
-                for(let j = 0; j < array2.length; j++ ) {
-                    let object2 = array2[j];
-                    if (canvasOperations.checkCollision(object1, object2)) {
-                        rules.what && rules.what({
-                            collection: collectionForCompare,
-                            object: object1,
-                            index: i
-                        },
-                        {
-                            collection: collectionToCompare,
-                            object: object2,
-                            index: j
-                        })
-                    }
-                }
-            }
-        });
-    }
 
     render() {
-        this.checkCollisions();
+        CollisionService.instance.processObjects(this.objects);
 
         canvasOperations.clearField();
         _.each(this.objects,(collectionInst, index) => {

@@ -2,21 +2,20 @@
 
 //load vendor shit
 import $ from '../../vendor/jquery';
-import jQuery from '../../vendor/jquery';
 
 //load core services
 import { CanvasOperations } from '../core/canvasOperations';
 import { AnimationService } from '../core/animationService';
+import { CollisionService } from '../core/collisionService';
 
 //load object classes for drawing
-import { GameMap } from './gameMap';
 import { HeroObject } from '../game/heroObject';
 import { EnemyObject } from '../game/enemyObject';
 import { ObjectCollection } from '../core/objects/objectCollection';
-import { CollisionRules } from '../core/collisionRules';
 
 var canvasOperations = CanvasOperations.instance;
 var animationService = AnimationService.instance;
+var collisionService = CollisionService.instance;
 
 export class GameService {
     constructor(canvas, config) {
@@ -123,7 +122,7 @@ export class GameService {
         animationService.objects.enemies = animationService.objects.enemies || new ObjectCollection();
         animationService.objects.enemyWeapon = animationService.objects.enemyWeapon || new ObjectCollection();
 
-        this.startEnemiesMoving(enemies);
+        // this.startEnemiesMoving(enemies);
         // this.startEnemyWeaponMove();
 
         return true;
@@ -161,24 +160,24 @@ export class GameService {
     }
 
     buildCollisionRules() {
-        animationService.collisionRules.push(new CollisionRules('hero', 'enemies', function ( hero, enemy) {
+        collisionService.addRules('hero', 'enemies', function ( hero, enemy) {
             console.log('end of the game');
             animationService.stop();
-        }));
+        });
 
-        animationService.collisionRules.push(new CollisionRules('heroWeapon', 'enemies', function ( weapon, enemy ) {
+        collisionService.addRules('heroWeapon', 'enemies', function ( weapon, enemy ) {
             clearInterval(weapon.object.movingInterval);
             weapon.object.movingInterval = null;
             weapon.object.hide();
             enemy.object.hide();
             weapon.collection.removeById(weapon.object);
             enemy.collection.removeByIndex(enemy.index);
-        }));
+        });
 
-        animationService.collisionRules.push(new CollisionRules('hero', 'enemyWeapon', function ( hero, enemyWeapon ) {
+        collisionService.addRules('hero', 'enemyWeapon', function ( hero, enemyWeapon ) {
             console.log('end of the game');
             animationService.stop();
-        }))
+        });
     }
 
     gameEnd() {
