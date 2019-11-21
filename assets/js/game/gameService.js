@@ -1,9 +1,8 @@
 'use strict';
 
-//load vendor shit
-import $ from '../../vendor/jquery';
 
-//load core services
+import $ from 'jquery';
+
 import { CanvasOperations } from '../core/canvasOperations';
 import { AnimationService } from '../core/animationService';
 import { CollisionService } from '../core/collisionService';
@@ -123,7 +122,7 @@ export class GameService {
         animationService.objects.enemyWeapon = animationService.objects.enemyWeapon || new ObjectCollection();
 
         // this.startEnemiesMoving(enemies);
-        // this.startEnemyWeaponMove();
+        this.startEnemyWeaponMove();
 
         return true;
     }
@@ -144,9 +143,9 @@ export class GameService {
     }
 
     startEnemyWeaponMove() {
-        // let enemyWeaponInterval = setInterval(() => {
-        //     this.startWeaponMove(animationService.objects.enemies.collection[0], animationService.objects.enemies);
-        // }, 500);
+        let enemyWeaponInterval = setInterval(() => {
+            this.startWeaponMove(animationService.objects.enemies.collection[0], animationService.objects.enemies);
+        }, 500);
     }
     
     startWeaponMove(object, collection, speed = 1, time = 300) {
