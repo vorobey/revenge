@@ -5,6 +5,6 @@ export class WeaponObject extends ImageObject {
     height = 2;
 
     get imageUrl() {
-        return 'assets/images/lightsaber.png'
+        return 'src/images/lightsaber.png'
     }
 }

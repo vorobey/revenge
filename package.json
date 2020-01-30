@@ -1,7 +1,7 @@
 {
   "name": "revenge",
   "version": "1.0.0",
-  "description": "Простенькая игрушка на Canvas. Выросла из тестового задания, решил впоследствии потихоньку допиливать функционал, улучшать внешний вид игры и отачивать мастерство яваскриптинга.",
+  "description": "Super-simple variation of 'space invaders' game",
   "main": "index.js",
   "dependencies": {
     "babel-plugin-transform-class-properties": "^6.10.2",

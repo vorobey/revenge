@@ -10,7 +10,7 @@ const METADATA =  {
 
 module.exports = {
 
-    entry: './assets/js/app.js',
+    entry: './src/js/app.js',
     output: {
         filename: './dist/js/app.js'
     },
@@ -44,8 +44,8 @@ module.exports = {
     },
     plugins: [
         new CopyWebpackPlugin([
-            { from: 'assets/files/', to: 'dist/files' },
-            { from: 'assets/images/', to: 'dist/images' }
+            { from: 'src/files/', to: 'dist/files' },
+            { from: 'src/images/', to: 'dist/images' }
         ], {
             copyUnmodified: true
         }),

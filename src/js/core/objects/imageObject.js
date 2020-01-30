@@ -12,7 +12,7 @@ export class ImageObject extends BasicObject {
         @prop imageUrl путь до изображения для объекта
      */
     get imageUrl() {
-        return 'assets/images/hero.png';
+        return 'src/images/hero.png';
     }
 
     constructor(props) {

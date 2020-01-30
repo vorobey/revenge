@@ -5,7 +5,7 @@ export class HeroObject extends ImageObject {
     width = 2;
     height = 2;
     get imageUrl() {
-        return 'assets/images/hero.png';
+        return 'src/images/hero.png';
     }
 
     constructor(props) {

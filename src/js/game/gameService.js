@@ -8,8 +8,8 @@ import { AnimationService } from '../core/animationService';
 import { CollisionService } from '../core/collisionService';
 
 //load object classes for drawing
-import { HeroObject } from '../game/heroObject';
-import { EnemyObject } from '../game/enemyObject';
+import { HeroObject } from './heroObject';
+import { EnemyObject } from './enemyObject';
 import { ObjectCollection } from '../core/objects/objectCollection';
 
 var canvasOperations = CanvasOperations.instance;
@@ -18,8 +18,6 @@ var collisionService = CollisionService.instance;
 
 export class GameService {
     constructor(canvas, config) {
-        console.log('gameServiceConstructor init');
-
         this.config = config;
         canvasOperations.setCanvas(canvas);
         canvasOperations.calculateCells(config.map);
@@ -42,7 +40,7 @@ export class GameService {
         //навешиваем обработчики на клавиши для движения персонажа
         this.bindKeys(hero);
 
-        //показываем вражин
+        //показываем врагов
         this.generateEnemies();
     }
 
@@ -57,6 +55,7 @@ export class GameService {
                 shootTmt = null;
             }, 1000);
         };
+        //TODO избавиться от жиквери
         $(document).on('keydown', (e) => {
             if (e.keyCode == 37) {
                 if (!movementLeft) {
@@ -94,11 +93,11 @@ export class GameService {
         });
     }
 
-    //строим матрицу для размещения вражин и размещаим
+    //строим матрицу для размещения врагов и размещаем
     generateEnemies() {
-        //сколько строк карты должно быть заполнено вражинами
+        //сколько строк карты должно быть заполнено врагами
         const EnemiesRowCount = 3;
-        //какое расстояние между вражинами (одна клетка - оптимально, думаю)
+        //какое расстояние между врагами
         const EnemiesGap = 2;
 
         let enemies = this.enemies = [];
@@ -121,14 +120,14 @@ export class GameService {
         animationService.objects.enemies = animationService.objects.enemies || new ObjectCollection();
         animationService.objects.enemyWeapon = animationService.objects.enemyWeapon || new ObjectCollection();
 
-        // this.startEnemiesMoving(enemies);
-        this.startEnemyWeaponMove();
+        this.startEnemiesMoving(enemies);
+        // this.startEnemyWeaponMove();
 
         return true;
     }
 
     startEnemiesMoving(enemies) {
-        const MovingSpeed = 1500;
+        const MovingSpeed = 3000;
         const MovingStep = 1;
         let interval = setInterval(()=> {
             for (let i = 0; i < enemies.length; i++) {

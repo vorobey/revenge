@@ -1,7 +1,7 @@
 'use strict';
 
-import { CanvasOperations } from '../core/canvasOperations';
-import { CollisionService } from '../core/collisionService';
+import { CanvasOperations } from './canvasOperations';
+import { CollisionService } from './collisionService';
 
 var canvasOperations = CanvasOperations.instance;
 
