@@ -7,7 +7,7 @@
     "babel-plugin-transform-class-properties": "^6.10.2",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "json-loader": "^0.5.4",
     "lodash": "^4.17.15",
     "node-sass": "^4.13.0",
